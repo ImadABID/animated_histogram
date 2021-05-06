@@ -59,7 +59,7 @@ class Hist(Scene):
         position_logo = (4-0.7)*UP
         logo.shift(position_logo)
 
-        seg = Rectangle(height = Param["segment_d_height"], width = Param["segment_width"], fill_color=WHITE, fill_opacity=1, stroke_opacity=0)
+        seg = Rectangle(height = Param["segment_d_height"], width = Param["segment_width"], fill_color=WHITE, fill_opacity=1, stroke_opacity=0.2, stroke_color = RED)
         position_seg = (-4 + Param["line_height_from_bottom"] + Param["segment_d_height"] * self.histogram[self.choices[i]] + 0.5 * Param["segment_d_height"] ) * UP + (-line_edge_x + Param["segment_width"] * self.choices[i] + 0.5 * Param["segment_width"] )*RIGHT
         seg.shift(position_seg)
 
