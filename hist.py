@@ -24,8 +24,8 @@ class Hist(Scene):
     def construct(self):
         #your annimation param
         self.choices_logo_path=["logos/0.png","logos/1.png","logos/2.png","logos/3.png","logos/4.png"]
-        self.nbr_experience = 20
-        self.anim_runtime = 0.2
+        self.nbr_experience = 100
+        self.anim_runtime_0 = 0.5
         #self.choices = random_uniform(len(self.choices_logo_path), self.nbr_experience)
         self.choices = random_gauss(len(self.choices_logo_path), 1, self.nbr_experience)
 
@@ -54,6 +54,8 @@ class Hist(Scene):
 
     def play_experience(self, i, Param, line_edge_x):
 
+        run_time = self.anim_runtime_0/(1.1**i)
+
         logo = ImageMobject(self.choices_logo_path[self.choices[i]])
         logo.scale(Param["logo_size"]/logo.height)
         position_logo = (4-0.7)*UP
@@ -63,14 +65,14 @@ class Hist(Scene):
         position_seg = (-4 + Param["line_height_from_bottom"] + Param["segment_d_height"] * self.histogram[self.choices[i]] + 0.5 * Param["segment_d_height"] ) * UP + (-line_edge_x + Param["segment_width"] * self.choices[i] + 0.5 * Param["segment_width"] )*RIGHT
         seg.shift(position_seg)
 
-        self.play(FadeIn(logo), run_time=self.anim_runtime)
+        self.play(FadeIn(logo), run_time=run_time)
 
         if(self.histogram[self.choices[i]] == 0):
             logo_x = ImageMobject(self.choices_logo_path[self.choices[i]])
             logo_x.scale(Param["logo_size"]/logo_x.height)
             logo_x.shift((4-0.5*Param["logo_size"]-0.1)*DOWN + (-line_edge_x + Param["segment_width"] * self.choices[i] + 0.5 * Param["segment_width"] )*RIGHT)
-            self.play(FadeOutAndShift(logo, position_seg-position_logo), FadeInFrom(seg, position_logo), FadeIn(logo_x), run_time=self.anim_runtime)
+            self.play(FadeOutAndShift(logo, position_seg-position_logo), FadeInFrom(seg, position_logo), FadeIn(logo_x), run_time=run_time)
         else:
-            self.play(FadeOutAndShift(logo, position_seg-position_logo), FadeInFrom(seg, position_logo), run_time=self.anim_runtime)
+            self.play(FadeOutAndShift(logo, position_seg-position_logo), FadeInFrom(seg, position_logo), run_time=run_time)
 
         self.histogram[self.choices[i]] += 1
