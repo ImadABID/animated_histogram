@@ -153,3 +153,12 @@ class minse_log(Scene):
         text = Tex("$-log$")
         self.play(FadeInFrom(text, 4 * DOWN), run_time = 3)
         self.wait()
+
+class quation(Scene):
+    def construct(self):
+        text1 = Text("How much information do we obtain")
+        text2 = Text("about the original draw")
+        text3 = Text("when we see the last one ?")
+        text = VGroup(text1, text2,text3).arrange(DOWN, buff=0.4)
+        self.play(Write(text), run_time = 4)
+        self.wait()
