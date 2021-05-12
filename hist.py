@@ -205,3 +205,11 @@ class Information_def(Scene):
         self.play(FadeIn(img3),  run_time=1)
         self.wait(2)
         self.play(FadeOut(txt1),FadeOut(txt2),FadeOut(txt3),FadeOut(txt4),FadeOut(img1),FadeOut(img2),FadeOut(img3),  run_time=1)
+
+class available_at(Scene):
+    def construct(self):
+        text = Text("The animation code source is available at : github.com/ImadABID/animated_histogram")
+        text.scale(0.2)
+        self.play(Write(text), run_time = 2)
+        self.wait()
+        self.play(FadeOutAndShift(text,DOWN), run_time = 1)
