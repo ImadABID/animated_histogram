@@ -1,3 +1,4 @@
+from typing_extensions import runtime
 from manim import *
 import numpy
 
@@ -151,6 +152,7 @@ class Weight_func_condi(Scene):
 class minse_log(Scene):
     def construct(self):
         text = Tex("$-log$")
+        text.scale(4)
         self.play(FadeInFrom(text, 4 * DOWN), run_time = 3)
         self.wait()
 
@@ -162,3 +164,44 @@ class quation(Scene):
         text = VGroup(text1, text2,text3).arrange(DOWN, buff=0.4)
         self.play(Write(text), run_time = 4)
         self.wait()
+
+class Information_def(Scene):
+    def construct(self):
+        sc_fac = 1.5
+        extrem_left = 7.1
+        padding = 0.2
+        txt1 = Text("I = H(")
+        txt1.scale(sc_fac)
+        txt1.shift((extrem_left-0.5*txt1.width-padding)*LEFT)
+
+        img1 = ImageMobject("logo/quation.png")
+        img1.scale(txt1.height/img1.height)
+        img1.shift((extrem_left-txt1.width-0.5*img1.width-padding)*LEFT)
+
+        txt2 = Text(") - H(")
+        txt2.scale(sc_fac)
+        txt2.shift((extrem_left-txt1.width-img1.width-0.5*txt2.width-padding)*LEFT)
+
+        img2 = ImageMobject("logo/quation.png")
+        img2.scale(txt2.height/img2.height)
+        img2.shift((extrem_left-txt1.width-img1.width-txt2.width-0.5*img2.width-padding)*LEFT)
+
+        txt3 = Text("|")
+        txt3.scale(sc_fac)
+        txt3.shift((extrem_left-txt1.width-img1.width-txt2.width-img2.width-0.5*txt3.width-padding)*LEFT)
+
+        img3 = ImageMobject("logo/umbrella.png")
+        img3.scale(txt3.height/img3.height)
+        img3.shift((extrem_left-txt1.width-img1.width-txt2.width-img2.width-txt3.width-0.5*img3.width-padding)*LEFT)
+
+        txt4 = Text(")")
+        txt4.scale(sc_fac)
+        txt4.shift((extrem_left-txt1.width-img1.width-txt2.width-img2.width-txt3.width-img3.width-0.5*txt4.width-padding)*LEFT)
+
+        self.play(Write(txt1), Write(txt2), Write(txt3), Write(txt4), run_time=2)
+        self.wait()
+        self.play(FadeIn(img1), FadeIn(img2),  run_time=1)
+        self.wait()
+        self.play(FadeIn(img3),  run_time=1)
+        self.wait(2)
+        self.play(FadeOut(txt1),FadeOut(txt2),FadeOut(txt3),FadeOut(txt4),FadeOut(img1),FadeOut(img2),FadeOut(img3),  run_time=1)
