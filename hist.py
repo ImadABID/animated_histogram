@@ -133,7 +133,17 @@ class Hist(Scene):
             for j in range(len(self.hist_objects[i])):
                 animations += [ApplyMethod(self.hist_objects[i][j].ponderation, h(p), 0.5*self.hist_objects[i][j].height*(h(p)-1) + j*(h(p)-1)*self.hist_objects[i][j].height), FadeOut(multi_txt)]
         
-        self.play(*animations_proba, run_time=1)
-        self.play(*animations_h, run_time=1)
-        self.play(*animations_multi, run_time=1)
-        self.play(*animations, run_time=4)
+        self.play(*animations_proba, run_time=2)
+        self.play(*animations_h, run_time=2)
+        self.play(*animations_multi, run_time=2)
+        self.play(*animations, run_time=6)
+
+class Weight_func_condi(Scene):
+    def construct(self):
+        cond1 = Tex("$h(\\mathbb P(x)=0) = 0$")
+        cond2 = Tex("$h(\\mathbb P(x)=1) = 0$")
+        cond3 = Tex("$h(\\mathbb P(x)\\mathbb P(y)) = h(\\mathbb P(x)) + h(\\mathbb P(y))$")
+
+        conditions = VGroup(cond1, cond2, cond3).arrange(DOWN, buff=0.4)
+        self.play(Write(conditions))
+        self.wait()
