@@ -19,11 +19,17 @@ def random_gauss(nbr_choice, sigma, nbr_exp):
     
     return Choices
 
+class Segment(Rectangle):
+    def ponderation(self, sca, shi_up):
+        self.stretch_to_fit_height(self.height*sca)
+        self.shift(shi_up * UP)
+        return self
+
 class Hist(Scene):
     
     def construct(self):
         #your annimation param
-        self.choices_logo_path=["logos/0.png","logos/1.png","logos/2.png","logos/3.png","logos/4.png"]
+        self.choices_logo_path=["logo/BDA.png","logo/BDE.png","logo/clubee.png","logo/Eirbot.png","logo/enseirb.png", "logo/Vost.png", "logo/zik.png", "logo/eirspace.png"]
         self.nbr_experience = 100
         self.anim_runtime_0 = 0.5
         #self.choices = random_uniform(len(self.choices_logo_path), self.nbr_experience)
@@ -43,14 +49,16 @@ class Hist(Scene):
 
         #inter data
         self.histogram = numpy.zeros((len(self.choices_logo_path),), dtype=int)
+        self.hist_objects = len(self.choices_logo_path) * [None]
 
         #annimation
         self.play(Create(line))
         self.wait()
 
         for i in range(self.nbr_experience):
-            print(i)
             self.play_experience(i, Param, line_edge_x)
+        
+        self.play_ponderation()
 
     def play_experience(self, i, Param, line_edge_x):
 
@@ -61,7 +69,7 @@ class Hist(Scene):
         position_logo = (4-0.7)*UP
         logo.shift(position_logo)
 
-        seg = Rectangle(height = Param["segment_d_height"], width = Param["segment_width"], fill_color=WHITE, fill_opacity=1, stroke_opacity=0.2, stroke_color = RED)
+        seg = Segment(height = Param["segment_d_height"], width = Param["segment_width"], fill_color=WHITE, fill_opacity=1, stroke_opacity=0.2, stroke_color = RED)
         position_seg = (-4 + Param["line_height_from_bottom"] + Param["segment_d_height"] * self.histogram[self.choices[i]] + 0.5 * Param["segment_d_height"] ) * UP + (-line_edge_x + Param["segment_width"] * self.choices[i] + 0.5 * Param["segment_width"] )*RIGHT
         seg.shift(position_seg)
 
@@ -76,3 +84,56 @@ class Hist(Scene):
             self.play(FadeOutAndShift(logo, position_seg-position_logo), FadeInFrom(seg, position_logo), run_time=run_time)
 
         self.histogram[self.choices[i]] += 1
+        if(self.hist_objects[self.choices[i]] == None):
+            self.hist_objects[self.choices[i]] = [seg]
+        else :
+            self.hist_objects[self.choices[i]] += [seg]
+
+    def play_ponderation(self):
+        def h(x):
+            return -numpy.log(x)
+
+        txt_scale = 0.2
+        txt_up_padding = 0.5
+
+
+        animations_proba = []
+        animations_h = []
+        animations_multi = []
+        animations = []
+
+        for i in range(len(self.hist_objects)):
+            if self.hist_objects[i] == None :
+                continue
+
+            p = len(self.hist_objects[i])/self.nbr_experience
+
+            shift_to = self.hist_objects[i][len(self.hist_objects[i])-1].get_center() + txt_up_padding * UP
+
+            proba_txt = Text("p = "+str(p))
+            proba_txt.scale(txt_scale)
+            proba_txt.shift(shift_to)
+
+            str_h_p = str(h(p))
+            if(len(str_h_p)>4):
+                str_h_p = str_h_p[0:4]
+
+            h_txt = Text("h("+str(p)+")="+str_h_p)
+            h_txt.scale(txt_scale)
+            h_txt.shift(shift_to)
+
+            multi_txt = Text("x"+str(str_h_p))
+            multi_txt.scale(txt_scale)
+            multi_txt.shift(shift_to)
+
+            animations_proba += [Write(proba_txt)]
+            animations_h += [ReplacementTransform(proba_txt, h_txt)]
+            animations_multi += [ReplacementTransform(h_txt, multi_txt)]
+
+            for j in range(len(self.hist_objects[i])):
+                animations += [ApplyMethod(self.hist_objects[i][j].ponderation, h(p), 0.5*self.hist_objects[i][j].height*(h(p)-1) + j*(h(p)-1)*self.hist_objects[i][j].height), FadeOut(multi_txt)]
+        
+        self.play(*animations_proba, run_time=1)
+        self.play(*animations_h, run_time=1)
+        self.play(*animations_multi, run_time=1)
+        self.play(*animations, run_time=4)
