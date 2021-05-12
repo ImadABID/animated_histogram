@@ -147,3 +147,9 @@ class Weight_func_condi(Scene):
         conditions = VGroup(cond1, cond2, cond3).arrange(DOWN, buff=0.4)
         self.play(Write(conditions))
         self.wait()
+
+class minse_log(Scene):
+    def construct(self):
+        text = Tex("$-log$")
+        self.play(FadeInFrom(text, 4 * DOWN), run_time = 3)
+        self.wait()
